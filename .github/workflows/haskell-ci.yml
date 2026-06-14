@@ -104,7 +104,7 @@ jobs:
 
       - name: Download cabal-check script
         run: |
-          curl -sSL https://raw.githubusercontent.com/mrkkrp/haskell-ci/main/cabal-check.sh -o cabal-check.sh
+          curl -sSL https://raw.githubusercontent.com/mrkkrp/haskell-ci/master/cabal-check.sh -o cabal-check.sh
           chmod +x cabal-check.sh
 
       - name: Run cabal check on main package
