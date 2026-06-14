@@ -13,7 +13,7 @@ on:
 
 jobs:
   ci:
-    uses: mrkkrp/haskell-ci/.github/workflows/haskell-ci.yml@main
+    uses: mrkkrp/haskell-ci/.github/workflows/haskell-ci.yml@master
     with:
       # Script to set up Docker services before tests
       pre-test-script: |

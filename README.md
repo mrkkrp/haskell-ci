@@ -32,7 +32,7 @@ on:
 
 jobs:
   ci:
-    uses: mrkkrp/haskell-ci/.github/workflows/haskell-ci.yml@main
+    uses: mrkkrp/haskell-ci/.github/workflows/haskell-ci.yml@master
 ```
 
 That's it! This gives you a complete CI pipeline with sensible defaults.
@@ -76,7 +76,7 @@ Most single-package projects work with defaults:
 ```yaml
 jobs:
   ci:
-    uses: mrkkrp/haskell-ci/.github/workflows/haskell-ci.yml@main
+    uses: mrkkrp/haskell-ci/.github/workflows/haskell-ci.yml@master
 ```
 
 ### Multi-Package Project
@@ -87,7 +87,7 @@ subdirectories):
 ```yaml
 jobs:
   ci:
-    uses: mrkkrp/haskell-ci/.github/workflows/haskell-ci.yml@main
+    uses: mrkkrp/haskell-ci/.github/workflows/haskell-ci.yml@master
     with:
       # List subdirectories containing additional .cabal packages
       additional-packages: 'my-package-tests'
@@ -109,7 +109,7 @@ For projects requiring external services (databases, APIs):
 ```yaml
 jobs:
   ci:
-    uses: mrkkrp/haskell-ci/.github/workflows/haskell-ci.yml@main
+    uses: mrkkrp/haskell-ci/.github/workflows/haskell-ci.yml@master
     with:
       pre-test-script: |
         docker pull postgres:15
@@ -123,7 +123,7 @@ For libraries that must work on Windows:
 ```yaml
 jobs:
   ci:
-    uses: mrkkrp/haskell-ci/.github/workflows/haskell-ci.yml@main
+    uses: mrkkrp/haskell-ci/.github/workflows/haskell-ci.yml@master
     with:
       test-windows: true
       # Uses the same GHC versions for both Linux and Windows
@@ -136,7 +136,7 @@ Full control over all aspects:
 ```yaml
 jobs:
   ci:
-    uses: mrkkrp/haskell-ci/.github/workflows/haskell-ci.yml@main
+    uses: mrkkrp/haskell-ci/.github/workflows/haskell-ci.yml@master
     with:
       ghc-versions: '["9.8.2", "9.10.1"]'
       cabal-version: '3.14'

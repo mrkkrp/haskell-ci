@@ -13,5 +13,5 @@ on:
 
 jobs:
   ci:
-    uses: mrkkrp/haskell-ci/.github/workflows/haskell-ci.yml@main
+    uses: mrkkrp/haskell-ci/.github/workflows/haskell-ci.yml@master
     # All defaults work for simple projects, no inputs needed
