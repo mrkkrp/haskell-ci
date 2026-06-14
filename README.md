@@ -46,7 +46,6 @@ That's it! This gives you a complete CI pipeline with sensible defaults.
 | `ghc-versions` | GHC versions to test (JSON array) | `["9.10.3", "9.12.4", "9.14.1"]` |
 | `cabal-version` | Cabal version | `3.16` |
 | `run-ormolu` | Run Ormolu formatting check | `true` |
-| `ormolu-version` | Ormolu action version | `v17` |
 
 ### Multi-Package Projects
 

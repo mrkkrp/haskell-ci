@@ -21,12 +21,6 @@ on:
         type: boolean
         default: true
 
-      ormolu-version:
-        description: 'Ormolu action version'
-        required: false
-        type: string
-        default: 'v17'
-
       test-windows:
         description: 'Also test on Windows'
         required: false
@@ -57,7 +51,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: haskell-actions/run-ormolu@${{ inputs.ormolu-version }}
+      - uses: haskell-actions/run-ormolu@v17
 
   build-linux:
     runs-on: ubuntu-latest
