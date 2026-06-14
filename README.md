@@ -52,7 +52,7 @@ That's it! This gives you a complete CI pipeline with sensible defaults.
 
 | Input | Description | Default |
 |-------|-------------|---------|
-| `additional-packages` | Space-separated list of additional packages in subdirectories (e.g., test packages). These packages will have formatting checks, cabal check, haddock generation, and sdist creation applied to them in addition to the main package. | `""` |
+| `additional-packages` | Space-separated list of additional packages in subdirectories (e.g., test packages). These packages will have formatting checks, cabal check, and sdist creation applied to them in addition to the main package. | `""` |
 
 ### Cross-Platform Testing
 
@@ -93,15 +93,14 @@ jobs:
       additional-packages: 'my-package-tests'
 ```
 
-This ensures that all packages get:
+This ensures that additional packages get:
 - Code formatting checks (`cabal format`)
 - Package validation (`cabal check`)
-- Documentation generation (`cabal haddock`)
 - Source distribution creation (`cabal sdist`)
 
-Note: `cabal build all` and `cabal test all` automatically handle all
-packages in your `cabal.project`, so you don't need to specify packages for
-building and testing.
+Note: `cabal build all`, `cabal test all`, and `cabal haddock all`
+automatically handle all packages in your `cabal.project`, so you don't need
+to specify packages for building, testing, or documentation generation.
 
 ### With External Services
 
@@ -162,7 +161,6 @@ If you have commands that handle packages in subdirectories:
 ```yaml
 - run: pushd my-tests && cabal format && popd
 - run: pushd my-tests && cabal check && popd
-- run: cabal haddock my-tests
 - run: pushd my-tests && cabal sdist && popd
 ```
 
@@ -216,7 +214,7 @@ Each build job performs:
 7. Build all packages (`cabal build all`)
 8. Run pre-test script (optional)
 9. Run all tests (`cabal test all`)
-10. Generate documentation
+10. Generate documentation for all packages (`cabal haddock all`)
 11. Create source distributions
 
 ## Versioning

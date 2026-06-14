@@ -34,7 +34,7 @@ on:
         default: false
 
       additional-packages:
-        description: 'Subdirectories containing additional .cabal packages for formatting, checking, haddock, and sdist (space-separated)'
+        description: 'Subdirectories containing additional .cabal packages for formatting, checking, and sdist (space-separated)'
         required: false
         type: string
         default: ''
@@ -137,22 +137,8 @@ jobs:
       - name: Run tests
         run: cabal test all
 
-      - name: Generate Haddock documentation for main package
-        run: |
-          # Try to detect package name from cabal file
-          PACKAGE_NAME=$(ls *.cabal 2>/dev/null | head -1 | sed 's/\.cabal$//')
-          if [ -n "$PACKAGE_NAME" ]; then
-            cabal haddock "$PACKAGE_NAME"
-          else
-            cabal haddock
-          fi
-
-      - name: Generate Haddock documentation for additional packages
-        if: inputs.additional-packages != ''
-        run: |
-          for pkg in ${{ inputs.additional-packages }}; do
-            cabal haddock "$pkg"
-          done
+      - name: Generate Haddock documentation
+        run: cabal haddock all
 
       - name: Create source distribution for main package
         run: cabal sdist
@@ -207,7 +193,7 @@ jobs:
         run: cabal test all
 
       - name: Generate Haddock documentation
-        run: cabal haddock
+        run: cabal haddock all
 
       - name: Create source distribution
         run: cabal sdist
