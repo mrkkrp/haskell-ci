@@ -17,7 +17,7 @@ A reusable GitHub Actions workflow for Haskell projects that eliminates CI/CD bo
 
 ## Quick Start
 
-In your Haskell project, create `.github/workflows/ci.yml`:
+In your Haskell project, create `.github/workflows/ci.yaml`:
 
 ```yaml
 name: CI
@@ -35,7 +35,15 @@ jobs:
     uses: mrkkrp/haskell-ci/.github/workflows/haskell-ci.yml@master
 ```
 
-That's it! This gives you a complete CI pipeline with sensible defaults.
+This GitHub action assumes the existence of a `cabal.project` file of this
+form:
+
+```
+packages: .
+tests: True      # recommended, will not be enabled by this action
+benchmarks: True # similarly for benchmarks
+constraints: my-package +dev # enable dev options for CI, such as -Wall -Werror
+```
 
 ## Configuration Options
 
