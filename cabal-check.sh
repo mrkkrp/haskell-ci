@@ -12,7 +12,10 @@ else
     status=$?
 fi
 
+# Always print the output
+printf '%s\n' "$output"
+
+# Exit with error if there were errors or warnings
 if [ "$status" -ne 0 ] || grep -q '^Warning:' <<<"$output"; then
-    printf '%s\n' "$output"
     exit 1
 fi
