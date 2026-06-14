@@ -73,7 +73,7 @@ jobs:
         run: cabal update
 
       - name: Freeze dependencies
-        run: cabal freeze
+        run: cabal freeze --enable-documentation
 
       - name: Cache dependencies
         uses: actions/cache@v5.0.2
@@ -121,18 +121,15 @@ jobs:
             fi
           done
 
-      - name: Build project
-        run: cabal build all
+      - name: Build project with documentation
+        run: cabal build all --enable-documentation
 
       - name: Run pre-test script
         if: inputs.pre-test-script != ''
         run: ${{ inputs.pre-test-script }}
 
       - name: Run tests
-        run: cabal test all
-
-      - name: Generate Haddock documentation
-        run: cabal haddock all
+        run: cabal test all --enable-documentation
 
       - name: Create source distribution for main package
         run: cabal sdist
@@ -168,7 +165,7 @@ jobs:
         run: cabal update
 
       - name: Freeze dependencies
-        run: cabal freeze
+        run: cabal freeze --enable-documentation
 
       - name: Cache dependencies
         uses: actions/cache@v5.0.2
@@ -180,14 +177,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ matrix.ghc }}-${{ inputs.cache-version }}-
 
-      - name: Build project
-        run: cabal build all
+      - name: Build project with documentation
+        run: cabal build all --enable-documentation
 
       - name: Run tests
-        run: cabal test all
-
-      - name: Generate Haddock documentation
-        run: cabal haddock all
+        run: cabal test all --enable-documentation
 
       - name: Create source distribution
         run: cabal sdist

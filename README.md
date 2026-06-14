@@ -12,7 +12,7 @@ A reusable GitHub Actions workflow for Haskell projects that eliminates CI/CD bo
 - **Multi-package project** support (automatically builds and tests all packages)
 - **Configurable build options**
 - **Pre-test setup** for external services
-- **Documentation generation** with Haddock
+- **Documentation generation** with Haddock (built efficiently alongside code)
 - **Source distribution** creation
 
 ## Quick Start
@@ -210,11 +210,10 @@ Each build job performs:
 4. Cache dependencies
 5. Check formatting
 6. Run cabal check
-7. Build all packages (`cabal build all`)
+7. Build all packages with documentation (`cabal build all --enable-documentation`)
 8. Run pre-test script (optional)
 9. Run all tests (`cabal test all`)
-10. Generate documentation for all packages (`cabal haddock all`)
-11. Create source distributions
+10. Create source distributions
 
 ## Versioning
 
