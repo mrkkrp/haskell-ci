@@ -63,6 +63,7 @@ That's it! This gives you a complete CI pipeline with sensible defaults.
 
 | Input | Description | Default |
 |-------|-------------|---------|
+| `system-dependencies` | System packages to install via apt-get (space-separated, Linux only) | `""` |
 | `pre-test-script` | Script to run before tests | `""` |
 | `cache-version` | Cache key version suffix | `0` |
 
@@ -100,6 +101,18 @@ This ensures that additional packages get:
 Note: `cabal build all`, `cabal test all`, and `cabal haddock all`
 automatically handle all packages in your `cabal.project`, so you don't need
 to specify packages for building, testing, or documentation generation.
+
+### With System Dependencies
+
+For projects requiring system libraries (e.g., libssl, libpq, zlib):
+
+```yaml
+jobs:
+  ci:
+    uses: mrkkrp/haskell-ci/.github/workflows/haskell-ci.yml@master
+    with:
+      system-dependencies: 'libssl-dev libpq-dev zlib1g-dev'
+```
 
 ### With External Services
 

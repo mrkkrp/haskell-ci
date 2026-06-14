@@ -33,6 +33,12 @@ on:
         type: string
         default: ''
 
+      system-dependencies:
+        description: 'System packages to install via apt-get (space-separated)'
+        required: false
+        type: string
+        default: ''
+
       pre-test-script:
         description: 'Script to run before tests'
         required: false
@@ -62,6 +68,12 @@ jobs:
         ghc: ${{ fromJSON(inputs.ghc-versions) }}
     steps:
       - uses: actions/checkout@v6
+
+      - name: Install system dependencies
+        if: inputs.system-dependencies != ''
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ${{ inputs.system-dependencies }}
 
       - uses: haskell-actions/setup@v2
         id: setup-haskell-cabal
