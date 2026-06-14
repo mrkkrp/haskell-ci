@@ -15,5 +15,7 @@ jobs:
   ci:
     uses: mrkkrp/haskell-ci/.github/workflows/haskell-ci.yml@main
     with:
-      # Specify additional packages (test packages)
+      # Specify subdirectories containing additional .cabal packages
+      # These will get formatting checks, cabal check, haddock, and sdist
+      # (The main package in the root is always processed)
       additional-packages: 'megaparsec-tests'

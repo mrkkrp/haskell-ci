@@ -52,7 +52,7 @@ That's it! This gives you a complete CI pipeline with sensible defaults.
 
 | Input | Description | Default |
 |-------|-------------|---------|
-| `additional-packages` | Space-separated list of additional packages | `""` |
+| `additional-packages` | Space-separated list of additional packages in subdirectories (e.g., test packages). These packages will have formatting checks, cabal check, haddock generation, and sdist creation applied to them in addition to the main package. | `""` |
 
 ### Cross-Platform Testing
 
@@ -81,15 +81,27 @@ jobs:
 
 ### Multi-Package Project
 
-For projects with multiple packages (e.g., main package + tests package):
+For projects with multiple packages (e.g., main package + tests package in
+subdirectories):
 
 ```yaml
 jobs:
   ci:
     uses: mrkkrp/haskell-ci/.github/workflows/haskell-ci.yml@main
     with:
+      # List subdirectories containing additional .cabal packages
       additional-packages: 'my-package-tests'
 ```
+
+This ensures that all packages get:
+- Code formatting checks (`cabal format`)
+- Package validation (`cabal check`)
+- Documentation generation (`cabal haddock`)
+- Source distribution creation (`cabal sdist`)
+
+Note: `cabal build all` and `cabal test all` automatically handle all
+packages in your `cabal.project`, so you don't need to specify packages for
+building and testing.
 
 ### With External Services
 
@@ -146,15 +158,25 @@ Replace your existing `.github/workflows/ci.yml` with one of the examples above.
 ### Handling Special Cases
 
 #### Multiple Packages
-If you have commands like:
+If you have commands that handle packages in subdirectories:
 ```yaml
 - run: pushd my-tests && cabal format && popd
+- run: pushd my-tests && cabal check && popd
+- run: cabal haddock my-tests
+- run: pushd my-tests && cabal sdist && popd
 ```
 
 Replace with:
 ```yaml
 with:
+  # Specify subdirectory containing the additional package
   additional-packages: 'my-tests'
+```
+
+Multiple packages can be specified with space separation:
+```yaml
+with:
+  additional-packages: 'package-tests package-benchmarks'
 ```
 
 #### Docker Services

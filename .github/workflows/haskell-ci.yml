@@ -34,7 +34,7 @@ on:
         default: false
 
       additional-packages:
-        description: 'Additional packages to format/check/build (space-separated)'
+        description: 'Subdirectories containing additional .cabal packages for formatting, checking, haddock, and sdist (space-separated)'
         required: false
         type: string
         default: ''
