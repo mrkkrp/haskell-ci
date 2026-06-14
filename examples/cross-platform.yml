@@ -1,0 +1,22 @@
+# Example: Cross-platform project (like path-io)
+# Place this in your repository's .github/workflows/ci.yml
+
+name: CI
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  ci:
+    uses: mrkkrp/haskell-ci/.github/workflows/haskell-ci.yml@main
+    with:
+      # Enable Windows testing
+      test-windows: true
+      # GHC versions for both Linux and Windows
+      ghc-versions: '["9.10.3", "9.12.4", "9.14.1"]'
+      # Note: cabal-version applies to both Linux and Windows

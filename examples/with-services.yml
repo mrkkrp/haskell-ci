@@ -1,0 +1,21 @@
+# Example: Project with external services (like req with httpbin)
+# Place this in your repository's .github/workflows/ci.yml
+
+name: CI
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  ci:
+    uses: mrkkrp/haskell-ci/.github/workflows/haskell-ci.yml@main
+    with:
+      # Script to set up Docker services before tests
+      pre-test-script: |
+        docker pull kennethreitz/httpbin
+        docker run -p 1234:80 kennethreitz/httpbin &

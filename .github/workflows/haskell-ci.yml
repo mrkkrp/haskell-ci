@@ -1,0 +1,213 @@
+name: Reusable Haskell CI Workflow
+
+on:
+  workflow_call:
+    inputs:
+      ghc-versions:
+        description: 'GHC versions to test (JSON string array)'
+        required: false
+        type: string
+        default: '["9.10.3", "9.12.4", "9.14.1"]'
+
+      cabal-version:
+        description: 'Cabal version to use'
+        required: false
+        type: string
+        default: '3.16'
+
+      run-ormolu:
+        description: 'Run ormolu formatting check'
+        required: false
+        type: boolean
+        default: true
+
+      ormolu-version:
+        description: 'Ormolu action version'
+        required: false
+        type: string
+        default: 'v17'
+
+      test-windows:
+        description: 'Also test on Windows'
+        required: false
+        type: boolean
+        default: false
+
+      additional-packages:
+        description: 'Additional packages to format/check/build (space-separated)'
+        required: false
+        type: string
+        default: ''
+
+      pre-test-script:
+        description: 'Script to run before tests'
+        required: false
+        type: string
+        default: ''
+
+      cache-version:
+        description: 'Cache key version suffix'
+        required: false
+        type: string
+        default: '0'
+
+jobs:
+  ormolu:
+    if: inputs.run-ormolu
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: haskell-actions/run-ormolu@${{ inputs.ormolu-version }}
+
+  build-linux:
+    runs-on: ubuntu-latest
+    needs: [ormolu]
+    if: ${{ !cancelled() && (needs.ormolu.result == 'success' || needs.ormolu.result == 'skipped') }}
+    strategy:
+      matrix:
+        ghc: ${{ fromJSON(inputs.ghc-versions) }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: haskell-actions/setup@v2
+        id: setup-haskell-cabal
+        with:
+          ghc-version: ${{ matrix.ghc }}
+          cabal-version: ${{ inputs.cabal-version }}
+
+      - name: Update Cabal
+        run: cabal update
+
+      - name: Freeze dependencies
+        run: cabal freeze
+
+      - name: Cache dependencies
+        uses: actions/cache@v5.0.2
+        with:
+          path: |
+            ${{ steps.setup-haskell-cabal.outputs.cabal-store }}
+            dist-newstyle
+          key: ${{ runner.os }}-${{ matrix.ghc }}-${{ inputs.cache-version }}-${{ hashFiles('cabal.project.freeze') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ matrix.ghc }}-${{ inputs.cache-version }}-
+
+      - name: Format main package
+        run: cabal format
+
+      - name: Format additional packages
+        if: inputs.additional-packages != ''
+        run: |
+          for pkg in ${{ inputs.additional-packages }}; do
+            if [ -d "$pkg" ]; then
+              pushd "$pkg"
+              cabal format
+              popd
+            fi
+          done
+
+      - name: Check formatting
+        run: git diff --exit-code --color=always
+
+      - name: Download cabal-check script
+        run: |
+          curl -sSL https://raw.githubusercontent.com/mrkkrp/haskell-ci/main/cabal-check.sh -o cabal-check.sh
+          chmod +x cabal-check.sh
+
+      - name: Run cabal check on main package
+        run: ./cabal-check.sh
+
+      - name: Run cabal check on additional packages
+        if: inputs.additional-packages != ''
+        run: |
+          for pkg in ${{ inputs.additional-packages }}; do
+            if [ -d "$pkg" ]; then
+              pushd "$pkg"
+              ../cabal-check.sh
+              popd
+            fi
+          done
+
+      - name: Build project
+        run: cabal build all
+
+      - name: Run pre-test script
+        if: inputs.pre-test-script != ''
+        run: ${{ inputs.pre-test-script }}
+
+      - name: Run tests
+        run: cabal test all
+
+      - name: Generate Haddock documentation for main package
+        run: |
+          # Try to detect package name from cabal file
+          PACKAGE_NAME=$(ls *.cabal 2>/dev/null | head -1 | sed 's/\.cabal$//')
+          if [ -n "$PACKAGE_NAME" ]; then
+            cabal haddock "$PACKAGE_NAME"
+          else
+            cabal haddock
+          fi
+
+      - name: Generate Haddock documentation for additional packages
+        if: inputs.additional-packages != ''
+        run: |
+          for pkg in ${{ inputs.additional-packages }}; do
+            cabal haddock "$pkg"
+          done
+
+      - name: Create source distribution for main package
+        run: cabal sdist
+
+      - name: Create source distribution for additional packages
+        if: inputs.additional-packages != ''
+        run: |
+          for pkg in ${{ inputs.additional-packages }}; do
+            if [ -d "$pkg" ]; then
+              pushd "$pkg"
+              cabal sdist
+              popd
+            fi
+          done
+
+  build-windows:
+    if: inputs.test-windows
+    runs-on: windows-latest
+    needs: [ormolu]
+    strategy:
+      matrix:
+        ghc: ${{ fromJSON(inputs.ghc-versions) }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: haskell-actions/setup@v2
+        id: setup-haskell-cabal
+        with:
+          ghc-version: ${{ matrix.ghc }}
+          cabal-version: ${{ inputs.cabal-version }}
+
+      - name: Update Cabal
+        run: cabal update
+
+      - name: Freeze dependencies
+        run: cabal freeze
+
+      - name: Cache dependencies
+        uses: actions/cache@v5.0.2
+        with:
+          path: |
+            ${{ steps.setup-haskell-cabal.outputs.cabal-store }}
+            dist-newstyle
+          key: ${{ runner.os }}-${{ matrix.ghc }}-${{ inputs.cache-version }}-${{ hashFiles('cabal.project.freeze') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ matrix.ghc }}-${{ inputs.cache-version }}-
+
+      - name: Build project
+        run: cabal build all
+
+      - name: Run tests
+        run: cabal test all
+
+      - name: Generate Haddock documentation
+        run: cabal haddock
+
+      - name: Create source distribution
+        run: cabal sdist

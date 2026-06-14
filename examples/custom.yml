@@ -1,0 +1,25 @@
+# Example: Customized configuration
+# Place this in your repository's .github/workflows/ci.yml
+
+name: CI
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  ci:
+    uses: mrkkrp/haskell-ci/.github/workflows/haskell-ci.yml@main
+    with:
+      # Custom GHC versions
+      ghc-versions: '["9.8.2", "9.10.1"]'
+      # Custom Cabal version
+      cabal-version: '3.14'
+      # Disable ormolu
+      run-ormolu: false
+      # Custom cache version (useful for cache busting)
+      cache-version: '1'

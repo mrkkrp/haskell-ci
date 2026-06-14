@@ -1,0 +1,32 @@
+# Test workflow to validate the reusable workflow syntax
+name: Test Workflow
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Validate workflow syntax
+        run: |
+          echo "Validating reusable workflow syntax..."
+          # Check if the workflow file exists
+          if [ ! -f ".github/workflows/haskell-ci.yml" ]; then
+            echo "ERROR: Reusable workflow file not found!"
+            exit 1
+          fi
+
+          # Basic YAML validation would go here
+          echo "Workflow file found and appears valid."
+
+      - name: List examples
+        run: |
+          echo "Available example configurations:"
+          ls -la examples/

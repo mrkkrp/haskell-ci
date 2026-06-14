@@ -1,0 +1,17 @@
+# Example: Simple single-package project (like text-metrics, zip)
+# Place this in your repository's .github/workflows/ci.yml
+
+name: CI
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  ci:
+    uses: mrkkrp/haskell-ci/.github/workflows/haskell-ci.yml@main
+    # All defaults work for simple projects, no inputs needed

@@ -1,0 +1,19 @@
+# Example: Multi-package project (like megaparsec, parser-combinators)
+# Place this in your repository's .github/workflows/ci.yml
+
+name: CI
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  ci:
+    uses: mrkkrp/haskell-ci/.github/workflows/haskell-ci.yml@main
+    with:
+      # Specify additional packages (test packages)
+      additional-packages: 'megaparsec-tests'
