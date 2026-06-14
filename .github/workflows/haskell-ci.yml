@@ -85,10 +85,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ matrix.ghc }}-${{ inputs.cache-version }}-
 
-      - name: Format main package
+      - name: Format Cabal file of the main package
         run: cabal format
 
-      - name: Format additional packages
+      - name: Format Cabal files of the additional packages
         if: inputs.additional-packages != ''
         run: |
           for pkg in ${{ inputs.additional-packages }}; do
@@ -99,7 +99,7 @@ jobs:
             fi
           done
 
-      - name: Check formatting
+      - name: Check formatting of Cabal files
         run: git diff --exit-code --color=always
 
       - name: Download cabal-check script
