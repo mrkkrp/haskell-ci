@@ -40,16 +40,16 @@ constraints: my-package +dev # enable dev options for CI, such as -Wall -Werror
 
 ## Configuration
 
-| Input | Description | Default |
-|-------|-------------|---------|
-| `ghc-versions` | GHC versions to test (JSON array) | `["9.10.3", "9.12.4", "9.14.1"]` |
-| `cabal-version` | Cabal version | `3.16` |
-| `run-ormolu` | Run Ormolu formatting check | `true` |
-| `additional-packages` | Space-separated list of additional packages in subdirectories (e.g., test packages). These packages will have formatting checks, cabal check, and sdist creation applied to them in addition to the main package. | `""` |
-| `test-windows` | Enable Windows testing | `false` |
-| `system-dependencies` | System packages to install via apt-get (space-separated, Linux only) | `""` |
-| `pre-test-script` | Script to run before tests | `""` |
-| `cache-version` | Cache key version suffix | `0` |
+| Input | Description | Type | Default |
+|-------|-------------|------|---------|
+| `ghc-versions` | GHC versions to test (JSON array) | `string` | `["9.10.3", "9.12.4", "9.14.1"]` |
+| `cabal-version` | Cabal version | `string` | `3.16` |
+| `run-ormolu` | Run Ormolu formatting check | `boolean` | `true` |
+| `additional-packages` | Space-separated list of additional packages in subdirectories (e.g., test packages). These packages will have formatting checks, cabal check, and sdist creation applied to them in addition to the main package. | `string` | `""` |
+| `test-windows` | Enable Windows testing | `boolean` | `false` |
+| `system-dependencies` | System packages to install via apt-get (space-separated, Linux only) | `string` | `""` |
+| `pre-test-script` | Script to run before tests | `string` | `""` |
+| `cache-version` | Cache key version suffix | `string` | `0` |
 
 None of these options is required.
 
