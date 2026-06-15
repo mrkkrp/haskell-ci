@@ -1,6 +1,12 @@
 # Haskell CI
 
-A reusable GitHub Actions workflow for Haskell projects that eliminates CI/CD boilerplate while maintaining flexibility.
+This project aims to capture my typical CI workflow for open source Haskell
+libraries. It is by no means suggested as a production CI workflow for
+Haskell projects. In particular, in the case of open source library
+development I do not bother pinning down all my dependencies—I welcome
+testing against newer versions of dependencies as they appear. The present
+workflow is intentionally built around Cabal and features checks that I find
+meaningful for developing and publishing on Hackage.
 
 ## Features
 
@@ -9,11 +15,11 @@ A reusable GitHub Actions workflow for Haskell projects that eliminates CI/CD bo
 - **Multi-GHC version** testing via build matrix
 - **Dependency caching** for faster builds
 - **Cross-platform support** (Linux and Windows)
-- **Multi-package project** support (automatically builds and tests all packages)
-- **Configurable build options**
 - **Pre-test setup** for external services
-- **Documentation generation** with Haddock (built efficiently alongside code)
-- **Source distribution** creation
+- **Multi-package project** support (custom checks apply to packages in
+  arbitrary subdirectories)
+- **Documentation generation** check
+- **Source distribution** check
 
 ## Quick Start
 
@@ -177,7 +183,9 @@ Replace your existing `.github/workflows/ci.yml` with one of the examples above.
 ### Handling Special Cases
 
 #### Multiple Packages
+
 If you have commands that handle packages in subdirectories:
+
 ```yaml
 - run: pushd my-tests && cabal format && popd
 - run: pushd my-tests && cabal check && popd
