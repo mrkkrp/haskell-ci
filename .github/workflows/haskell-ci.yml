@@ -120,7 +120,7 @@ jobs:
           chmod +x cabal-check.sh
 
       - name: Run cabal check on main package
-        run: ./cabal-check.sh
+        run: ./cabal-check.sh '${{ inputs.ghc-versions }}'
 
       - name: Run cabal check on additional packages
         if: inputs.additional-packages != ''
@@ -128,7 +128,7 @@ jobs:
           for pkg in ${{ inputs.additional-packages }}; do
             if [ -d "$pkg" ]; then
               pushd "$pkg"
-              ../cabal-check.sh
+              ../cabal-check.sh '${{ inputs.ghc-versions }}'
               popd
             fi
           done
