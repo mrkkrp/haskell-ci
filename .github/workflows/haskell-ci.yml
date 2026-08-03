@@ -57,7 +57,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: haskell-actions/run-ormolu@v20
+      - uses: haskell-actions/run-ormolu@a0030b73a77602314fd2db0981d11180a0a0e0ed
 
   linux:
     runs-on: ubuntu-latest
