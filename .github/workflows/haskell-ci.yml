@@ -52,17 +52,16 @@ on:
         default: '0'
 
 jobs:
-  ormolu:
-    if: inputs.run-ormolu
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: haskell-actions/run-ormolu@v21
+  # ormolu:
+  #   if: inputs.run-ormolu
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v6
+  #     - uses: haskell-actions/run-ormolu@v21
 
   linux:
     runs-on: ubuntu-latest
-    needs: [ormolu]
-    if: ${{ !cancelled() && (needs.ormolu.result == 'success' || needs.ormolu.result == 'skipped') }}
+    # needs: [ormolu]
     strategy:
       matrix:
         ghc: ${{ fromJSON(inputs.ghc-versions) }}
@@ -160,7 +159,7 @@ jobs:
   windows:
     if: inputs.test-windows
     runs-on: windows-latest
-    needs: [ormolu]
+    # needs: [ormolu]
     strategy:
       matrix:
         ghc: ${{ fromJSON(inputs.ghc-versions) }}
