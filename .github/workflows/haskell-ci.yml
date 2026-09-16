@@ -15,8 +15,8 @@ on:
         type: string
         default: '3.16'
 
-      run-ormolu:
-        description: 'Run ormolu formatting check'
+      run-tilia:
+        description: 'Run the Tilia formatting check'
         required: false
         type: boolean
         default: true
@@ -52,16 +52,8 @@ on:
         default: '0'
 
 jobs:
-  # ormolu:
-  #   if: inputs.run-ormolu
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v6
-  #     - uses: haskell-actions/run-ormolu@v21
-
   linux:
     runs-on: ubuntu-latest
-    # needs: [ormolu]
     strategy:
       matrix:
         ghc: ${{ fromJSON(inputs.ghc-versions) }}
@@ -79,6 +71,9 @@ jobs:
         with:
           ghc-version: ${{ matrix.ghc }}
           cabal-version: ${{ inputs.cabal-version }}
+
+      - uses: mrkkrp/setup-tilia@v1
+        if: inputs.run-tilia
 
       - name: Update Cabal
         run: cabal update
@@ -132,6 +127,10 @@ jobs:
             fi
           done
 
+      - name: Check formatting of Haskell files
+        if: inputs.run-tilia
+        run: tilia check
+
       - name: Create source distribution for main package
         run: cabal sdist
 
@@ -159,7 +158,6 @@ jobs:
   windows:
     if: inputs.test-windows
     runs-on: windows-latest
-    # needs: [ormolu]
     strategy:
       matrix:
         ghc: ${{ fromJSON(inputs.ghc-versions) }}

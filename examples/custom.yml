@@ -19,7 +19,7 @@ jobs:
       ghc-versions: '["9.8.2", "9.10.1"]'
       # Custom Cabal version
       cabal-version: '3.14'
-      # Disable ormolu
-      run-ormolu: false
+      # Disable the formatting check
+      run-tilia: false
       # Custom cache version (useful for cache busting)
       cache-version: '1'
