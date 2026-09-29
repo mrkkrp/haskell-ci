@@ -58,7 +58,7 @@ jobs:
       matrix:
         ghc: ${{ fromJSON(inputs.ghc-versions) }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Install system dependencies
         if: inputs.system-dependencies != ''
@@ -162,7 +162,7 @@ jobs:
       matrix:
         ghc: ${{ fromJSON(inputs.ghc-versions) }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: haskell-actions/setup@v2
         id: setup-haskell-cabal
