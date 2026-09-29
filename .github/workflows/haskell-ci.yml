@@ -72,7 +72,7 @@ jobs:
           ghc-version: ${{ matrix.ghc }}
           cabal-version: ${{ inputs.cabal-version }}
 
-      - uses: mrkkrp/setup-tilia@v1
+      - uses: mrkkrp/setup-tilia@v2
         if: inputs.run-tilia
 
       - name: Update Cabal
@@ -129,7 +129,7 @@ jobs:
 
       - name: Check formatting of Haskell files
         if: inputs.run-tilia
-        run: tilia check
+        run: tilia check --must-not-decline
 
       - name: Create source distribution for main package
         run: cabal sdist
